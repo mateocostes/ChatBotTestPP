@@ -1,0 +1,22 @@
+[
+  {
+    "nickname": "agustinschilling",
+    "vector": {
+      "riesgo": 5,
+      "optimismo": 0,
+      "adaptabilidad": 3,
+      "habilidades": ["devops", "bdd"],
+      "lenguajes": ["java"]
+    }
+  },
+  {
+    "nickname": "mateocostes",
+    "vector": {
+      "riesgo": 4,
+      "optimismo": 2,
+      "adaptabilidad": 3,
+      "habilidades": ["asd", "sdsd"],
+      "lenguajes": ["python"]
+    }
+  }
+]

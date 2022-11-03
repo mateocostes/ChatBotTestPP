@@ -1,0 +1,11 @@
+{
+  "lookup": {
+    "eJyLrq6NBQAEOAGx": "action_listen",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEoBqLMYyEgsKk6trY0FAJglHho=": "guardar_nombre",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEoBqLMYyEgsKk6tJWBSemliUUpiUXxefm5SUSoBo2IBnRM63w==": "utter_saludar",
+    "eJyljEEKgDAMBL/SB/iCfkUkRA1SqKkkqZfSvxvQew/eZmB35tan0C6hG3CzVDiG9gIwnhTDJzmpEfu2KolvErtaDP5UBxSlPigdFWVHAS7nKvQrVc1IQDFXDw5KywO9I1db": "action_listen",
+    "eJylj1EKgDAMQ6/SA3iCXUVkVC0y0E7azp+xu1tQ/PVjfwkkj2SsbYB6Cl0RF0uZA9RHRMaDArxmT2rEni1K4pnEbi2AN9UFilL7IW0FZUWJnI9ZqAtVzEii4l4c2EX6ubfSkr7FbboBh6p0AQ==": "action_listen",
+    "eJylj1EKgDAMQ6+yA3iCXUVkVC1jMDtpO3/G7m5B//exvwSSF7K2vrh2Mz4BDk2FvGufCAQXevebnESRLFsF2TKJzKp31hQTwIJ9QIoV+AQOVK6dcQpVVZGDQK4GnCIN7hFGG+jbC2UkcSU=": "utter_despedir",
+    "eJylj0EKhTAMRK/SA3iCXkWkRDtIQaMkqZvi3Q18lx8U3M3A5GWmb2cX2i44Ek1WNo6h/URiWhHDbZaiBvZsVYhnCru1GPxSXZAozgfSXEkySeJtHQWfUNUMkpSW6sBPpId5jNkfvGqToTty+VPnhgwXdjuLZg==": "action_listen"
+  }
+}

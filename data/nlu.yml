@@ -1,91 +1,71 @@
 version: "3.1"
 
 nlu:
-- intent: greet
+- intent: saludar
   examples: |
+    - hola
+    - buenos dias
+    - buenas tardes
+    - buenas
+    - vamos
+    - que haces
+    - buenas noches
     - hey
-    - hello
-    - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
+    - que tal
 
-- intent: goodbye
+- intent: despedir
   examples: |
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - chau
+    - nos vemos
+    - adios
+    - nos vemos despues
+    - que tengas un lindo dia
+    - que tengas buenas tardes
+    - nos vemos luego
+    - hasta luego
 
-- intent: affirm
+- intent: afirmar
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - si
+    - s
+    - por supuesto
+    - correcto
+    - tal cual
+    - claro
 
-- intent: deny
+- intent: negar
   examples: |
     - no
     - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
-
-- intent: mood_great
+    - nunca
+    - no creo
+    - imposible
+    - no hay manera
+    - no necesariamente
+    
+- intent: desafiar_bot
   examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
+    - eres un bot?
+    - eres un humano?
+    - estoy hablando con un bot?
+    - estoy hablando con un ser vivo?
 
-- intent: mood_unhappy
+- intent: presentarse
   examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
+    - [mateocostes](participante)
+    - [agustinschilling](participante)
+    - [felipearroyo](participante)
+    - [gonzalosuarez](participante)
+    - [juanperez](participante)
+    - [usuarionuevo](participante)
+    - [nombre](participante)
+    - [pepe](participante)
 
-- intent: bot_challenge
+- intent: respuesta_pregunta
   examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
+    - [0] (valor_respuesta)
+    - [1] (valor_respuesta)
+    - [2] (valor_respuesta)
+    - [3] (valor_respuesta)
+    - [4] (valor_respuesta)
+    - [5] (valor_respuesta)

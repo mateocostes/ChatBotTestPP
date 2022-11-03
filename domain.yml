@@ -1,33 +1,47 @@
 version: "3.1"
 
 intents:
-  - greet
-  - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
+  - saludar
+  - despedir
+  - afirmar
+  - negar
+  - desafiar_bot
+  - presentarse
+  - respuesta_pregunta
+  
+entities:
+  - participante
+  - valor_respuesta
+
+slots:
+  participante:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
 
 responses:
-  utter_greet:
-  - text: "Hey! How are you?"
-
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
-
-  utter_goodbye:
-  - text: "Bye"
+  utter_despedir:
+  - text: "Chau!"
+  - text: "Hasta luego!"
+  - text: "Adios!"
 
   utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+  - text: "Soy un agilebot."
+
+  utter_explicacion:
+  - text: "En las proximas preguntas debes votar con valores del 0 al 5. Comencemos!"
+
+  utter_pregunta1:
+  - text: "Resolves la mayoria de tareas en tiempo y forma?"
+
+  utter_pregunta2:
+  - text: "Sos detallista?"
+  
+actions:
+  - "guardar_nombre"
+  - "guardar_valor_respuesta"
+  - "resetear_valores"
 
 session_config:
   session_expiration_time: 60
