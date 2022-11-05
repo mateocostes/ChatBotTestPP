@@ -179,7 +179,7 @@ class ActionGuardarConocimiento(Action):
             lenguajes.append("python")
             message = "Sabes programar en Java?"
         elif (pregunta_actual == 15):
-            lenguajes.append("Java")
+            lenguajes.append("java")
             message = "Te gusta programar en C#?"
         elif (pregunta_actual == 16):
             lenguajes.append("c#")
