@@ -50,6 +50,7 @@ valor_optimismo = 0
 valor_adaptabilidad = 0
 habilidades = []
 lenguajes = []
+preguntas_totales = 18
 
 def existeParticipante(nombre_participante) -> bool:
     response = requests.get(url=api_endpoint_get_vector).text
@@ -69,6 +70,24 @@ def crearVector(riesgo, optimismo, adaptabilidad, habilidades, lenguajes):
     vector["lenguajes"] = lenguajes
     return vector
 
+def altaValores(nombre_partipante):
+    global valor_riesgo, valor_optimismo, valor_adaptabilidad, habilidades, lenguajes
+    data = {}
+    data ["agilebotId"] = nombre_partipante
+    data ["vector"] = crearVector(int(valor_riesgo/3), int(valor_optimismo/3), int(valor_adaptabilidad/3), habilidades, lenguajes) #Casteo el valor a entero y lo divido por 3 al ser la cantidad de preguntas
+    r = requests.post(url=api_endpoint_set_vector, json=data)
+    print(data)
+    #response = requests.get(url=api_endpoint_get_vector).text
+    #print("response: " + response)
+
+def darAlta(nombre_participante) -> bool:
+    global pregunta_actual, preguntas_totales
+    if (pregunta_actual == preguntas_totales): #Chequeo si se realizaron de forma correcta todas la preguntas para asi dar de alta
+        altaValores(nombre_participante)
+        return true
+    else:
+        return false
+
 class ActionGuardarNombre(Action):
 
     def name(self) -> Text:
@@ -77,45 +96,135 @@ class ActionGuardarNombre(Action):
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         nombre_partipante = next (tracker.get_latest_entity_values("participante"),None)
         message = ""
-        print("Nombre Partipante: " + str(nombre_partipante))
         if (nombre_partipante != None):
-            print("Existe participante: " + str(bool(existeParticipante(nombre_partipante))))
             if(existeParticipante(nombre_partipante)):
-                message = "Hola, vamos a realizar una prueba de aptitud para ver lo que votarias ante ciertas tareas. Ademas, te voy a realizar alguna preguntas para determinar los conocimientos que tenes actualmente."
+                message = "Hola, vamos a realizar una prueba de aptitud para ver lo que votarias ante ciertas tareas. Ademas, te voy a realizar algunas consultas para determinar los conocimientos que tenes actualmente."
+                dispatcher.utter_message(text=message)
+                message = "En las proximas preguntas debes votar con valores del 0 al 5. Comencemos!"
+                dispatcher.utter_message(text=message)
+                message = "Que tan incomodo/a te sentis ante una situacion desconocido?"
+                dispatcher.utter_message(text=message)
             else:
                 message = "El nombre no corresponde a un AgileBot perteneciente al mundo"
+                dispatcher.utter_message(text=message)
         else:
             message = "No se puede reconocer el nombre del AgileBot"
-        dispatcher.utter_message(text=message)
+            dispatcher.utter_message(text=message)
         return [SlotSet("participante",str(nombre_partipante))]
 
 class ActionGuardarValorRespuesta(Action):
     def name(self) -> Text:
         return "guardar_valor_respuesta"
-    
-    def altaValores(self, nombre_partipante):
-        data = {}
-        data ["agilebotId"] = nombre_partipante
-        data ["vector"] = crearVector(valor_riesgo, valor_optimismo, valor_adaptabilidad, habilidades, lenguajes)
-        r = requests.post(url=api_endpoint_set_vector, json=data)
-        print(data)
 
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        global valor_riesgo, valor_optimismo, valor_adaptabilidad, habilidades, lenguajes, pregunta_actual #Declaro las variables globales a utilizar
         valor_respuesta = next (tracker.get_latest_entity_values("valor_respuesta"),None)
-        nombre_partipante = str(tracker.get_slot("participante"))
-        print("Nombre Partipante: " + str(nombre_partipante))
+        message = "Error"
         if (valor_respuesta != None):
-            pregunta_actual =+ 1
+            valor_respuesta = int(valor_respuesta)
+            pregunta_actual = pregunta_actual + 1
             if (pregunta_actual <= 3):
-                valor_riesgo =+ valor_respuesta
+                valor_riesgo = valor_riesgo + valor_respuesta
+                if (pregunta_actual == 1):
+                    message = "Que tan seguro/a te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
+                elif (pregunta_actual == 2):
+                    message = "Que tan sobrado/a estas de tiempo al finalizar tus sprints?"
+                elif (pregunta_actual == 3):
+                    message = "Solés pensar que las cosas saldrán bien?"
             elif (pregunta_actual <= 6):
-                valor_optimismo =+ valor_respuesta
+                valor_optimismo = valor_optimismo + valor_respuesta
+                if (pregunta_actual == 4):
+                    message = "Que tan frustrado/a te sentis cuando las cosas no salen como querrías que salgan?"
+                elif (pregunta_actual == 5):
+                    message = "Usualmente te encuentras de buen humor?"
+                elif (pregunta_actual == 6):
+                    message = "Que tanto confías en tus decisiones por sobre las de los demás?"
             elif (pregunta_actual <= 9):
-                valor_adaptabilidad =+ valor_respuesta
-            else: self.altaValores(nombre_partipante)
+                valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
+                if (pregunta_actual == 7):
+                    message = "En general, sos de seguir la corriente?"
+                elif (pregunta_actual == 8):
+                    message = "Solés confiar en las decisiones de tus pares?"
+                elif (pregunta_actual == 9):
+                    message = "En las siguiente preguntas responde con Si o No."
+                    dispatcher.utter_message(text=message)
+                    message = "Tenés conocimientos de devops?"
         else:
             message = "No se reconocio el valor de la respuesta"   
-            dispatcher.utter_message(text=message)
+        dispatcher.utter_message(text=message)
         return []
+
+class ActionGuardarConocimiento(Action):
+    def name(self) -> Text:
+        return "guardar_conocimiento"
+
+    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        global habilidades, lenguajes, pregunta_actual
+        nombre_participante = str(tracker.get_slot("participante"))
+        pregunta_actual = pregunta_actual + 1
+        message = ""
+        if (pregunta_actual == 10):
+            habilidades.append("devops")
+            message = "Tenés conocimientos de bases de datos?"
+        elif (pregunta_actual == 11):
+            habilidades.append("base de datos")
+            message = "Tenés conocimientos de inteligencia artificial?"
+        elif (pregunta_actual == 12):
+            habilidades.append("inteligencia artificial")
+            message = "Tenés conocimientos de front-end?"
+        elif (pregunta_actual == 13):
+            habilidades.append("front-end")
+            message = "Te sentis comodo/a programando en Python?"
+        elif (pregunta_actual == 14):
+            lenguajes.append("python")
+            message = "Sabes programar en Java?"
+        elif (pregunta_actual == 15):
+            lenguajes.append("Java")
+            message = "Te gusta programar en C#?"
+        elif (pregunta_actual == 16):
+            lenguajes.append("c#")
+            message = "Tenés conocimientos de C++?"
+        elif (pregunta_actual == 17):
+            lenguajes.append("c++")
+            message = "Programas en JavaScript?"
+        elif (pregunta_actual == 18):
+            lenguajes.append("javascript")
+            if darAlta(nombre_participante):
+                message = nombre_participante + ", realizaste de forma correcta la prueba de aptitud! Muchas gracias y hasta luego!"
+            else: message = "Ocurrio un error al realizar la prueba de aptitud! Vuelva a intentarlo de nuevo."
+        dispatcher.utter_message(text=message)
+        return []
+
+class ActionNoGuardarConocimiento(Action):
+    def name(self) -> Text:
+        return "no_guardar_conocimiento"
+
+    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        global habilidades, lenguajes, pregunta_actual
+        pregunta_actual = pregunta_actual + 1
+        nombre_participante = str(tracker.get_slot("participante"))
+        if (pregunta_actual == 10):
+            message = "Tenés conocimientos de bases de datos?"
+        elif (pregunta_actual == 11):
+            message = "Tenés conocimientos de inteligencia artificial?"
+        elif (pregunta_actual == 12):
+            message = "Tenés conocimientos de front-end?"
+        elif (pregunta_actual == 13):
+            message = "Te sentis comodo/a programando en Python?"
+        elif (pregunta_actual == 14):
+            message = "Sabes programar en Java?"
+        elif (pregunta_actual == 15):
+            message = "Te gusta programar en C#?"
+        elif (pregunta_actual == 16):
+            message = "Tenés conocimientos de C++?"
+        elif (pregunta_actual == 17):
+            message = "Programas en JavaScript?"
+        elif (pregunta_actual == 18):
+            if darAlta(nombre_participante):
+                message = nombre_participante + ", realizaste de forma correcta la prueba de aptitud! Muchas gracias y hasta luego!"
+            else: message = "Ocurrio un error al realizar la prueba de aptitud! Vuelva a intentarlo de nuevo."
+        dispatcher.utter_message(text=message)
+        return []
+
 
 

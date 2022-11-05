@@ -29,19 +29,11 @@ responses:
   utter_iamabot:
   - text: "Soy un agilebot."
 
-  utter_explicacion:
-  - text: "En las proximas preguntas debes votar con valores del 0 al 5. Comencemos!"
-
-  utter_pregunta1:
-  - text: "Resolves la mayoria de tareas en tiempo y forma?"
-
-  utter_pregunta2:
-  - text: "Sos detallista?"
-  
 actions:
   - "guardar_nombre"
   - "guardar_valor_respuesta"
-  - "resetear_valores"
+  - "guardar_conocimiento"
+  - "no_guardar_conocimiento"
 
 session_config:
   session_expiration_time: 60

@@ -1,0 +1,36 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-lenguaje",
+      "2": "I-lenguaje",
+      "3": "L-lenguaje",
+      "4": "U-lenguaje",
+      "5": "B-participante",
+      "6": "I-participante",
+      "7": "L-participante",
+      "8": "U-participante",
+      "9": "B-valor_respuesta",
+      "10": "I-valor_respuesta",
+      "11": "L-valor_respuesta",
+      "12": "U-valor_respuesta",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-lenguaje": 1,
+      "I-lenguaje": 2,
+      "L-lenguaje": 3,
+      "U-lenguaje": 4,
+      "B-participante": 5,
+      "I-participante": 6,
+      "L-participante": 7,
+      "U-participante": 8,
+      "B-valor_respuesta": 9,
+      "I-valor_respuesta": 10,
+      "L-valor_respuesta": 11,
+      "U-valor_respuesta": 12,
+      "O": 0
+    },
+    "num_tags": 13
+  }
+]

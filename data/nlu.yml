@@ -63,9 +63,10 @@ nlu:
 
 - intent: respuesta_pregunta
   examples: |
-    - [0] (valor_respuesta)
-    - [1] (valor_respuesta)
-    - [2] (valor_respuesta)
-    - [3] (valor_respuesta)
-    - [4] (valor_respuesta)
-    - [5] (valor_respuesta)
+    - [0](valor_respuesta)
+    - [1](valor_respuesta)
+    - [2](valor_respuesta)
+    - [3](valor_respuesta)
+    - [4](valor_respuesta)
+    - [5](valor_respuesta)
+

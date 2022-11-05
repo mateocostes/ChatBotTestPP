@@ -2,15 +2,37 @@ version: "3.1"
 
 stories:
 
-- story: camino_inicial
+- story: camino_principal
   steps:
   - intent: presentarse
   - action: guardar_nombre
-  - action: utter_explicacion
-  - action: utter_pregunta1
+  - checkpoint: check_siguiente
+
+- story: camino_preguntas_personalidad
+  steps:
+  - checkpoint: check_siguiente
   - intent: respuesta_pregunta
   - action: guardar_valor_respuesta
-  - action: utter_pregunta2
-  - intent: respuesta_pregunta
-  - action: guardar_valor_respuesta
-  - checkpoint: check_siguiente_2
+  - checkpoint: check_siguiente
+
+- story: camino_participante_no_valido
+  steps:
+  - checkpoint: check_siguiente
+  - intent: despedir
+  - action: utter_despedir
+
+- story: camino_afirmacion_conocimiento
+  steps:
+  - checkpoint: check_siguiente
+  - intent: afirmar
+  - action: guardar_conocimiento
+  - checkpoint: check_siguiente
+
+- story: camino_negacion_conocimiento
+  steps:
+  - checkpoint: check_siguiente
+  - intent: negar
+  - action: no_guardar_conocimiento
+  - checkpoint: check_siguiente
+
+
