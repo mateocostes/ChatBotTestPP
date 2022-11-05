@@ -216,7 +216,7 @@ class ActionNoGuardarConocimiento(Action):
         elif (pregunta_actual == 15):
             message = "Te gusta programar en C#?"
         elif (pregunta_actual == 16):
-            message = "Tenés conocimientos de C++?"
+            message = "Tenés conocimientos de C?"
         elif (pregunta_actual == 17):
             message = "Programas en JavaScript?"
         elif (pregunta_actual == 18):
