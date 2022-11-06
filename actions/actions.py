@@ -97,10 +97,18 @@ class ActionGuardarNombre(Action):
         nombre_partipante = next (tracker.get_latest_entity_values("participante"),None)
         message = ""
         if (nombre_partipante != None):
+            #Reinicio las varibles globales
+            global pregunta_actual, valor_riesgo, valor_optimismo, valor_adaptabilidad, habilidades, lenguajes
+            pregunta_actual = 0
+            valor_riesgo = 0
+            valor_optimismo = 0
+            valor_adaptabilidad = 0
+            habilidades = []
+            lenguajes = []
             if(existeParticipante(nombre_partipante)):
-                message = "Hola, vamos a realizar una prueba de aptitud para ver lo que votarias ante ciertas tareas. Ademas, te voy a realizar algunas consultas para determinar los conocimientos que tenes actualmente."
+                message = "Hola, vamos a realizar una prueba de aptitud para ver lo que votarias ante ciertas tareas. Ademas, te voy a realizar algunas consultas para determinar los conocimientos que tenes actualmente"
                 dispatcher.utter_message(text=message)
-                message = "En las proximas preguntas debes votar con valores del 0 al 5. Comencemos!"
+                message = "En las proximas preguntas debes votar con valores del 0 al 5"
                 dispatcher.utter_message(text=message)
                 message = "Que tan incomodo/a te sentis ante una situacion desconocido?"
                 dispatcher.utter_message(text=message)
@@ -126,29 +134,29 @@ class ActionGuardarValorRespuesta(Action):
             if (pregunta_actual <= 3):
                 valor_riesgo = valor_riesgo + valor_respuesta
                 if (pregunta_actual == 1):
-                    message = "Que tan seguro/a te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
+                    message = "¿Que tan seguro/a te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
                 elif (pregunta_actual == 2):
-                    message = "Que tan sobrado/a estas de tiempo al finalizar tus sprints?"
+                    message = "¿Que tan sobrado/a estas de tiempo al finalizar tus sprints?"
                 elif (pregunta_actual == 3):
-                    message = "Solés pensar que las cosas saldrán bien?"
+                    message = "Del 0 al 5, ¿Cuanto soles pensar que las cosas saldran bien?"
             elif (pregunta_actual <= 6):
                 valor_optimismo = valor_optimismo + valor_respuesta
                 if (pregunta_actual == 4):
-                    message = "Que tan frustrado/a te sentis cuando las cosas no salen como querrías que salgan?"
+                    message = "¿Que tan frustrado/a te sentis cuando las cosas no salen como querrías que salgan?"
                 elif (pregunta_actual == 5):
-                    message = "Usualmente te encuentras de buen humor?"
+                    message = "Del 0 al 5, ¿Usualmente te encuentras de buen humor?"
                 elif (pregunta_actual == 6):
-                    message = "Que tanto confías en tus decisiones por sobre las de los demás?"
+                    message = "¿Que tanto confias en tus decisiones por sobre las de los demas?"
             elif (pregunta_actual <= 9):
                 valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
                 if (pregunta_actual == 7):
-                    message = "En general, sos de seguir la corriente?"
+                    message = "En general, ¿Sos de seguir la corriente?"
                 elif (pregunta_actual == 8):
-                    message = "Solés confiar en las decisiones de tus pares?"
+                    message = "Del 0 al 5, ¿Soles confiar en las decisiones de tus pares?"
                 elif (pregunta_actual == 9):
-                    message = "En las siguiente preguntas responde con Si o No."
+                    message = "En las siguiente preguntas responde con Si o No"
                     dispatcher.utter_message(text=message)
-                    message = "Tenés conocimientos de devops?"
+                    message = "¿Tenes conocimientos de devops?"
         else:
             message = "No se reconocio el valor de la respuesta"   
         dispatcher.utter_message(text=message)
@@ -165,28 +173,28 @@ class ActionGuardarConocimiento(Action):
         message = ""
         if (pregunta_actual == 10):
             habilidades.append("devops")
-            message = "Tenés conocimientos de bases de datos?"
+            message = "¿Tenes conocimientos de bases de datos?"
         elif (pregunta_actual == 11):
             habilidades.append("base de datos")
-            message = "Tenés conocimientos de inteligencia artificial?"
+            message = "¿Tenes conocimientos de inteligencia artificial?"
         elif (pregunta_actual == 12):
             habilidades.append("inteligencia artificial")
-            message = "Tenés conocimientos de front-end?"
+            message = "¿Tenes conocimientos de front-end?"
         elif (pregunta_actual == 13):
             habilidades.append("front-end")
-            message = "Te sentis comodo/a programando en Python?"
+            message = "¿Te sentis comodo/a programando en Python?"
         elif (pregunta_actual == 14):
             lenguajes.append("python")
-            message = "Sabes programar en Java?"
+            message = "¿Sabes programar en Java?"
         elif (pregunta_actual == 15):
             lenguajes.append("java")
-            message = "Te gusta programar en C#?"
+            message = "¿Te gusta programar en C#?"
         elif (pregunta_actual == 16):
             lenguajes.append("c#")
-            message = "Tenés conocimientos de C?"
+            message = "¿Tenés conocimientos de C?"
         elif (pregunta_actual == 17):
             lenguajes.append("c")
-            message = "Programas en JavaScript?"
+            message = "¿Programas en JavaScript?"
         elif (pregunta_actual == 18):
             lenguajes.append("javascript")
             if darAlta(nombre_participante):
@@ -204,21 +212,21 @@ class ActionNoGuardarConocimiento(Action):
         pregunta_actual = pregunta_actual + 1
         nombre_participante = str(tracker.get_slot("participante"))
         if (pregunta_actual == 10):
-            message = "Tenés conocimientos de bases de datos?"
+            message = "¿Tenes conocimientos de bases de datos?"
         elif (pregunta_actual == 11):
-            message = "Tenés conocimientos de inteligencia artificial?"
+            message = "¿Tenes conocimientos de inteligencia artificial?"
         elif (pregunta_actual == 12):
-            message = "Tenés conocimientos de front-end?"
+            message = "¿Tenes conocimientos de front-end?"
         elif (pregunta_actual == 13):
-            message = "Te sentis comodo/a programando en Python?"
+            message = "¿Te sentis comodo/a programando en Python?"
         elif (pregunta_actual == 14):
-            message = "Sabes programar en Java?"
+            message = "¿Sabes programar en Java?"
         elif (pregunta_actual == 15):
-            message = "Te gusta programar en C#?"
+            message = "¿Te gusta programar en C#?"
         elif (pregunta_actual == 16):
-            message = "Tenés conocimientos de C?"
+            message = "¿Tenes conocimientos de C?"
         elif (pregunta_actual == 17):
-            message = "Programas en JavaScript?"
+            message = "¿Programas en JavaScript?"
         elif (pregunta_actual == 18):
             if darAlta(nombre_participante):
                 message = nombre_participante + ", realizaste de forma correcta la prueba de aptitud! Muchas gracias y hasta luego!"
