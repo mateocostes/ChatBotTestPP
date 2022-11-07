@@ -110,7 +110,7 @@ class ActionGuardarNombre(Action):
                 dispatcher.utter_message(text=message)
                 message = "En las proximas preguntas debes votar con valores del 0 al 5"
                 dispatcher.utter_message(text=message)
-                message = "Que tan incomodo/a te sentis ante una situacion desconocido?"
+                message = "Que tan comodo te sentis ante una situacion desconocido?"
                 dispatcher.utter_message(text=message)
             else:
                 message = "El nombre no corresponde a un AgileBot perteneciente al mundo"
@@ -134,19 +134,19 @@ class ActionGuardarValorRespuesta(Action):
             if (pregunta_actual <= 3):
                 valor_riesgo = valor_riesgo + valor_respuesta
                 if (pregunta_actual == 1):
-                    message = "¿Que tan seguro/a te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
+                    message = "¿Que tan seguro te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
                 elif (pregunta_actual == 2):
-                    message = "¿Que tan sobrado/a estas de tiempo al finalizar tus sprints?"
+                    message = "¿Que tan ajustado estas de tiempo al finalizar tus sprints?"
                 elif (pregunta_actual == 3):
                     message = "Del 0 al 5, ¿Cuanto soles pensar que las cosas saldran bien?"
             elif (pregunta_actual <= 6):
                 valor_optimismo = valor_optimismo + valor_respuesta
                 if (pregunta_actual == 4):
-                    message = "¿Que tan frustrado/a te sentis cuando las cosas no salen como querrías que salgan?"
+                    message = "¿Que tan frustrado te sentis cuando las cosas no salen como querrias que salgan?"
                 elif (pregunta_actual == 5):
                     message = "Del 0 al 5, ¿Usualmente te encuentras de buen humor?"
                 elif (pregunta_actual == 6):
-                    message = "¿Que tanto confias en tus decisiones por sobre las de los demas?"
+                    message = "¿Que tanto confias en las decisiones de los demas por sobre las tuyas?"
             elif (pregunta_actual <= 9):
                 valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
                 if (pregunta_actual == 7):
@@ -173,16 +173,16 @@ class ActionGuardarConocimiento(Action):
         message = ""
         if (pregunta_actual == 10):
             habilidades.append("devops")
-            message = "¿Tenes conocimientos de bases de datos?"
+            message = "¿Trabajaste con bases de datos?"
         elif (pregunta_actual == 11):
             habilidades.append("base de datos")
             message = "¿Tenes conocimientos de inteligencia artificial?"
         elif (pregunta_actual == 12):
             habilidades.append("inteligencia artificial")
-            message = "¿Tenes conocimientos de front-end?"
+            message = "¿Realizaste algun trabajo de front-end?"
         elif (pregunta_actual == 13):
             habilidades.append("front-end")
-            message = "¿Te sentis comodo/a programando en Python?"
+            message = "¿Te sentis comodo programando en Python?"
         elif (pregunta_actual == 14):
             lenguajes.append("python")
             message = "¿Sabes programar en Java?"
@@ -212,13 +212,13 @@ class ActionNoGuardarConocimiento(Action):
         pregunta_actual = pregunta_actual + 1
         nombre_participante = str(tracker.get_slot("participante"))
         if (pregunta_actual == 10):
-            message = "¿Tenes conocimientos de bases de datos?"
+            message = "¿Trabajaste con de bases de datos?"
         elif (pregunta_actual == 11):
             message = "¿Tenes conocimientos de inteligencia artificial?"
         elif (pregunta_actual == 12):
-            message = "¿Tenes conocimientos de front-end?"
+            message = "¿Realizaste algun trabajo de front-end?"
         elif (pregunta_actual == 13):
-            message = "¿Te sentis comodo/a programando en Python?"
+            message = "¿Te sentis comodo programando en Python?"
         elif (pregunta_actual == 14):
             message = "¿Sabes programar en Java?"
         elif (pregunta_actual == 15):
