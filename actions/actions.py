@@ -110,7 +110,7 @@ class ActionGuardarNombre(Action):
                 dispatcher.utter_message(text=message)
                 message = "En las proximas preguntas debes votar con valores del 0 al 5"
                 dispatcher.utter_message(text=message)
-                message = "Que tan comodo te sentis ante una situacion desconocido?"
+                message = "Que tan comodo te sentis ante una situacion desconocida?"
                 dispatcher.utter_message(text=message)
             else:
                 message = "El nombre no corresponde a un AgileBot perteneciente al mundo"
@@ -150,7 +150,7 @@ class ActionGuardarValorRespuesta(Action):
             elif (pregunta_actual <= 9):
                 valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
                 if (pregunta_actual == 7):
-                    message = "En general, ¿Sos de seguir la corriente?"
+                    message = "¿Que tanto sos de seguir la corriente?"
                 elif (pregunta_actual == 8):
                     message = "Del 0 al 5, ¿Soles confiar en las decisiones de tus pares?"
                 elif (pregunta_actual == 9):
@@ -212,7 +212,7 @@ class ActionNoGuardarConocimiento(Action):
         pregunta_actual = pregunta_actual + 1
         nombre_participante = str(tracker.get_slot("participante"))
         if (pregunta_actual == 10):
-            message = "¿Trabajaste con de bases de datos?"
+            message = "¿Trabajaste con bases de datos?"
         elif (pregunta_actual == 11):
             message = "¿Tenes conocimientos de inteligencia artificial?"
         elif (pregunta_actual == 12):
