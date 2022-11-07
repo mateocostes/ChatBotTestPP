@@ -74,7 +74,7 @@ def altaValores(nombre_partipante):
     global valor_riesgo, valor_optimismo, valor_adaptabilidad, habilidades, lenguajes
     data = {}
     data ["agilebotId"] = nombre_partipante
-    data ["vector"] = crearVector(int(valor_riesgo/3), int(valor_optimismo/3), int(valor_adaptabilidad/3), habilidades, lenguajes) #Casteo el valor a entero y lo divido por 3 al ser la cantidad de preguntas
+    data ["vector"] = crearVector(round(valor_riesgo/3), round(valor_optimismo/3), round(valor_adaptabilidad/3), habilidades, lenguajes) #Casteo el valor a entero y lo divido por 3 al ser la cantidad de preguntas
     r = requests.post(url=api_endpoint_set_vector, json=data)
     print(data)
     #response = requests.get(url=api_endpoint_get_vector).text
@@ -142,7 +142,7 @@ class ActionGuardarValorRespuesta(Action):
             elif (pregunta_actual <= 6):
                 valor_optimismo = valor_optimismo + valor_respuesta
                 if (pregunta_actual == 4):
-                    message = "¿Que tan frustrado te sentis cuando las cosas no salen como querrias que salgan?"
+                    message = "¿Que tanto ves el lado bueno de las cosas?"
                 elif (pregunta_actual == 5):
                     message = "Del 0 al 5, ¿Usualmente te encuentras de buen humor?"
                 elif (pregunta_actual == 6):
@@ -150,7 +150,7 @@ class ActionGuardarValorRespuesta(Action):
             elif (pregunta_actual <= 9):
                 valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
                 if (pregunta_actual == 7):
-                    message = "¿Que tanto sos de seguir la corriente?"
+                    message = "¿Que tanto seguis la corriente?"
                 elif (pregunta_actual == 8):
                     message = "Del 0 al 5, ¿Soles confiar en las decisiones de tus pares?"
                 elif (pregunta_actual == 9):
