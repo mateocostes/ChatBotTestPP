@@ -1,6 +1,7 @@
 {
-    "introduccion": ["Hola", "Vota del 0 al 5"],
-    "riesgo": ["priesgo1", "priesgo2", "priesgo3"],
-    "optimismo": ["poptimismo1", "poptimismo2"],
-    "adaptabilidad": ["padaptabilidad1", "padaptabilidad2"]
-    }
+    "introduccion": ["Hola Vota del 0 al 5"],
+    "riesgo": ["priesgo1", "priesgo2"],
+    "optimismo": ["poptimismo1"],
+    "adaptabilidad": ["padaptabilidad1"],
+    "habilidades": ["hab1", "hab2"]
+}

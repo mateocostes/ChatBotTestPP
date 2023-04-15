@@ -50,7 +50,6 @@ valor_optimismo = 0
 valor_adaptabilidad = 0
 habilidades = []
 lenguajes = []
-preguntas_totales = 18
 direcPreguntas = "actions/preguntas.json"
 diccionarioPreguntas = readArchivo(direcPreguntas)
 
@@ -76,36 +75,68 @@ def altaValores(nombre_partipante):
     global valor_riesgo, valor_optimismo, valor_adaptabilidad, habilidades, lenguajes
     data = {}
     data ["agilebotId"] = nombre_partipante
-    data ["vector"] = crearVector(round(valor_riesgo/3), round(valor_optimismo/3), round(valor_adaptabilidad/3), habilidades, lenguajes) #Casteo el valor a entero y lo divido por 3 al ser la cantidad de preguntas
+    data ["vector"] = crearVector(round(valor_riesgo/cantidadPreguntas("riesgo")), round(valor_optimismo/cantidadPreguntas("optimismo")), round(valor_adaptabilidad/cantidadPreguntas("adaptabilidad")), habilidades, lenguajes) #Casteo el valor a entero y lo divido por la cantidad de preguntas
     r = requests.post(url=api_endpoint_set_vector, json=data)
-    print(data)
+    #print(data)
     #response = requests.get(url=api_endpoint_get_vector).text
     #print("response: " + response)
 
 def darAlta(nombre_participante) -> bool:
-    global pregunta_actual, preguntas_totales
-    if (pregunta_actual == preguntas_totales): #Chequeo si se realizaron de forma correcta todas la preguntas para asi dar de alta
+    global pregunta_actual
+    if (pregunta_actual == preguntasTotales("habilidades") - 1): #Chequeo si se realizaron de forma correcta todas la preguntas para asi dar de alta
         altaValores(nombre_participante)
         return true
     else:
         return false
 
-def leerPregunta(categoria, posicion) -> Text:
-    #print("Entro leer pregunta")
-    print("posicion: " + str(posicion))
-    print("pregunta: " + str(diccionarioPreguntas[categoria][posicion]))
-    return (diccionarioPreguntas[categoria][posicion])
+def leerPregunta(categoria, posicion, dispatcher):
+    message = str(diccionarioPreguntas[categoria][posicion])
+    dispatcher.utter_message(text=message)
 
-def CantidadPreguntas(categoria) -> int:
-    #print(len(diccionarioPreguntas[categoria]))
+def cantidadPreguntas(categoria) -> int:
+    #print(str(len(diccionarioPreguntas[categoria])))
     return (len(diccionarioPreguntas[categoria]))
+
+def leerTotalPreguntas(categoria, dispatcher):
+    for pregunta in diccionarioPreguntas[categoria]:
+        message = str(pregunta)
+        dispatcher.utter_message(text=message)
+
+def preguntasTotales(categoriaFinal) -> int:
+    cantidad = 0
+    for keys in diccionarioPreguntas.keys():
+        if not (str(keys).__eq__("introduccion")):
+            cantidad = cantidad + cantidadPreguntas(keys)
+            if str(keys).__eq__(str(categoriaFinal)):
+                return cantidad
+        
+def obtenerHabilidad(posicion) -> Text:
+    return(str(diccionarioPreguntas["habilidades"][posicion]))
+
+def accionConocimiento(guarda, dispatcher, tracker):
+    global habilidades, lenguajes, pregunta_actual
+    nombre_participante = str(tracker.get_slot("participante"))
+    message = ""
+    print("pregunta_actual: " + str(pregunta_actual))
+    print("preguntasTotales: " + str(preguntasTotales("habilidades")))
+    if bool(guarda):
+        habilidades.append(obtenerHabilidad(pregunta_actual - preguntasTotales("adaptabilidad")))
+    if (pregunta_actual < preguntasTotales("habilidades") - 1):
+        pregunta_actual = pregunta_actual + 1
+        leerPregunta("habilidades", pregunta_actual - preguntasTotales("adaptabilidad"), dispatcher)
+    elif (pregunta_actual == preguntasTotales("habilidades") - 1):
+        if darAlta(nombre_participante):
+            message = nombre_participante + ", realizaste de forma correcta la prueba de aptitud! Muchas gracias y hasta luego!"
+        else: message = "Ocurrio un error al realizar la prueba de aptitud! Vuelva a intentarlo de nuevo."
+        dispatcher.utter_message(text=message)
+
 
 class ActionGuardarNombre(Action):
 
     def name(self) -> Text:
         return "guardar_nombre"
 
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         nombre_partipante = next (tracker.get_latest_entity_values("participante"),None)
         message = ""
         if (nombre_partipante != None):
@@ -117,18 +148,9 @@ class ActionGuardarNombre(Action):
             valor_adaptabilidad = 0
             habilidades = []
             lenguajes = []
-            print("nombre_participante: " + nombre_partipante)
             if(existeParticipante(nombre_partipante)):
-                #message = "Hola, vamos a realizar una prueba de aptitud para ver lo que votarias ante ciertas tareas. Ademas, te voy a realizar algunas consultas para determinar los conocimientos que tenes actualmente"
-                #dispatcher.utter_message(text=message)
-                #message = "En las proximas preguntas debes votar con valores del 0 al 5"
-                #dispatcher.utter_message(text=message)
-                #message = "Que tan comodo te sentis ante una situacion desconocida?"
-                #dispatcher.utter_message(text=message)
-                message = leerPregunta("introduccion", 0)
-                dispatcher.utter_message(text=message)
-                message = leerPregunta("introduccion", 1)
-                dispatcher.utter_message(text=message)
+                leerTotalPreguntas("introduccion", dispatcher)
+                leerPregunta("riesgo", 0, dispatcher)
             else:
                 message = "El nombre no corresponde a un AgileBot perteneciente al mundo"
                 dispatcher.utter_message(text=message)
@@ -147,46 +169,24 @@ class ActionGuardarValorRespuesta(Action):
         message = "Error"
         if (valor_respuesta != None):
             valor_respuesta = int(valor_respuesta)
-            #if (pregunta_actual <= 3):
-             #   valor_riesgo = valor_riesgo + valor_respuesta
-             #   if (pregunta_actual == 1):
-             #       message = "¿Que tan seguro te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
-             #   elif (pregunta_actual == 2):
-             #       message = "¿Que tan ajustado estas de tiempo al finalizar tus sprints?"
-             #   elif (pregunta_actual == 3):
-             #       message = "Del 0 al 5, ¿Cuanto soles pensar que las cosas saldran bien?"
-            #elif (pregunta_actual <= 6):
-            #    valor_optimismo = valor_optimismo + valor_respuesta
-            #    if (pregunta_actual == 4):
-            #        message = "¿Que tanto ves el lado bueno de las cosas?"
-            #    elif (pregunta_actual == 5):
-            #        message = "Del 0 al 5, ¿Usualmente te encuentras de buen humor?"
-            #    elif (pregunta_actual == 6):
-            #        message = "¿Que tanto confias en las decisiones de los demas por sobre las tuyas?"
-            #elif (pregunta_actual <= 9):
-            #    valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
-            #    if (pregunta_actual == 7):
-            #        message = "¿Que tanto seguis la corriente?"
-            #    elif (pregunta_actual == 8):
-            #        message = "Del 0 al 5, ¿Soles confiar en las decisiones de tus pares?"
-            #    elif (pregunta_actual == 9):
-            #        message = "En las siguiente preguntas responde con Si o No"
-            #        dispatcher.utter_message(text=message)
-            #        message = "¿Tenes conocimientos de devops?"
-            print("pregunta actual: " + str(pregunta_actual))
-            if (pregunta_actual < CantidadPreguntas("riesgo")):
+            pregunta_actual = pregunta_actual + 1
+            if (pregunta_actual < cantidadPreguntas("riesgo")):
                 valor_riesgo = valor_riesgo + valor_respuesta
-                message = leerPregunta("riesgo", pregunta_actual)
-            elif (pregunta_actual < CantidadPreguntas("riesgo") + CantidadPreguntas("optimismo")):
-                valor_riesgo = valor_riesgo + valor_respuesta
-                message = leerPregunta("optimismo", pregunta_actual - CantidadPreguntas("riesgo"))
-            elif (pregunta_actual < CantidadPreguntas("riesgo") + CantidadPreguntas("optimismo") + CantidadPreguntas("adaptabilidad")):
-                valor_riesgo = valor_riesgo + valor_respuesta
-                message = leerPregunta("adaptabilidad", pregunta_actual - CantidadPreguntas("riesgo") - CantidadPreguntas("optimismo"))
+                print(str(valor_riesgo))
+                leerPregunta("riesgo", pregunta_actual, dispatcher)
+            elif (pregunta_actual < preguntasTotales("optimismo")):
+                valor_optimismo = valor_optimismo + valor_respuesta
+                leerPregunta("optimismo", pregunta_actual - cantidadPreguntas("riesgo"), dispatcher)
+            elif (pregunta_actual < preguntasTotales("adaptabilidad")):
+                valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
+                leerPregunta("adaptabilidad", pregunta_actual - preguntasTotales("optimismo"), dispatcher)
+            else : 
+                message = "En las siguiente preguntas responde con Si o No"
+                dispatcher.utter_message(text=message)
+                leerPregunta("habilidades", 0, dispatcher)
         else:
-            message = "No se reconocio el valor de la respuesta"  
-        pregunta_actual = pregunta_actual + 1 
-        dispatcher.utter_message(text=message)
+            message = "No se reconocio el valor de la respuesta"   
+            dispatcher.utter_message(text=message)
         return []
 
 class ActionGuardarConocimiento(Action):
@@ -194,40 +194,7 @@ class ActionGuardarConocimiento(Action):
         return "guardar_conocimiento"
 
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        global habilidades, lenguajes, pregunta_actual
-        nombre_participante = str(tracker.get_slot("participante"))
-        pregunta_actual = pregunta_actual + 1
-        message = ""
-        if (pregunta_actual == 10):
-            habilidades.append("devops")
-            message = "¿Trabajaste con bases de datos?"
-        elif (pregunta_actual == 11):
-            habilidades.append("base de datos")
-            message = "¿Tenes conocimientos de inteligencia artificial?"
-        elif (pregunta_actual == 12):
-            habilidades.append("inteligencia artificial")
-            message = "¿Realizaste algun trabajo de front-end?"
-        elif (pregunta_actual == 13):
-            habilidades.append("front-end")
-            message = "¿Te sentis comodo programando en Python?"
-        elif (pregunta_actual == 14):
-            lenguajes.append("python")
-            message = "¿Sabes programar en Java?"
-        elif (pregunta_actual == 15):
-            lenguajes.append("java")
-            message = "¿Te gusta programar en C#?"
-        elif (pregunta_actual == 16):
-            lenguajes.append("c#")
-            message = "¿Tenés conocimientos de C?"
-        elif (pregunta_actual == 17):
-            lenguajes.append("c")
-            message = "¿Programas en JavaScript?"
-        elif (pregunta_actual == 18):
-            lenguajes.append("javascript")
-            if darAlta(nombre_participante):
-                message = nombre_participante + ", realizaste de forma correcta la prueba de aptitud! Muchas gracias y hasta luego!"
-            else: message = "Ocurrio un error al realizar la prueba de aptitud! Vuelva a intentarlo de nuevo."
-        dispatcher.utter_message(text=message)
+        accionConocimiento(True, dispatcher, tracker)
         return []
 
 class ActionNoGuardarConocimiento(Action):
@@ -235,31 +202,7 @@ class ActionNoGuardarConocimiento(Action):
         return "no_guardar_conocimiento"
 
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        global habilidades, lenguajes, pregunta_actual
-        pregunta_actual = pregunta_actual + 1
-        nombre_participante = str(tracker.get_slot("participante"))
-        if (pregunta_actual == 10):
-            message = "¿Trabajaste con bases de datos?"
-        elif (pregunta_actual == 11):
-            message = "¿Tenes conocimientos de inteligencia artificial?"
-        elif (pregunta_actual == 12):
-            message = "¿Realizaste algun trabajo de front-end?"
-        elif (pregunta_actual == 13):
-            message = "¿Te sentis comodo programando en Python?"
-        elif (pregunta_actual == 14):
-            message = "¿Sabes programar en Java?"
-        elif (pregunta_actual == 15):
-            message = "¿Te gusta programar en C#?"
-        elif (pregunta_actual == 16):
-            message = "¿Tenes conocimientos de C?"
-        elif (pregunta_actual == 17):
-            message = "¿Programas en JavaScript?"
-        elif (pregunta_actual == 18):
-            if darAlta(nombre_participante):
-                message = nombre_participante + ", realizaste de forma correcta la prueba de aptitud! Muchas gracias y hasta luego!"
-            else: message = "Ocurrio un error al realizar la prueba de aptitud! Vuelva a intentarlo de nuevo."
-        dispatcher.utter_message(text=message)
+        accionConocimiento(False, dispatcher, tracker)
         return []
-
 
 
