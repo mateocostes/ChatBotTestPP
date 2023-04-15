@@ -40,8 +40,8 @@ def writeArchivo(dire,diccionario):
             json.dump(diccionario,archivo)
             archivo.close()
 
-api_endpoint_set_vector = "http://181.94.129.186:8088/dispatcher/set-vector"
-api_endpoint_get_vector = "http://181.94.129.186:8088/dispatcher/get-vector"
+api_endpoint_set_vector = "http://201.235.167.187:8088/dispatcher/set-vector" # 192.168.0.209:8088
+api_endpoint_get_vector = "http://201.235.167.187:8088/dispatcher/get-vector" # 192.168.0.209:8088
 diccionarioParticipantes = ""
 #Variables utilizadas para guardar los valores
 pregunta_actual = 0
@@ -51,6 +51,8 @@ valor_adaptabilidad = 0
 habilidades = []
 lenguajes = []
 preguntas_totales = 18
+direcPreguntas = "actions/preguntas.json"
+diccionarioPreguntas = readArchivo(direcPreguntas)
 
 def existeParticipante(nombre_participante) -> bool:
     response = requests.get(url=api_endpoint_get_vector).text
@@ -88,6 +90,16 @@ def darAlta(nombre_participante) -> bool:
     else:
         return false
 
+def leerPregunta(categoria, posicion) -> Text:
+    #print("Entro leer pregunta")
+    print("posicion: " + str(posicion))
+    print("pregunta: " + str(diccionarioPreguntas[categoria][posicion]))
+    return (diccionarioPreguntas[categoria][posicion])
+
+def CantidadPreguntas(categoria) -> int:
+    #print(len(diccionarioPreguntas[categoria]))
+    return (len(diccionarioPreguntas[categoria]))
+
 class ActionGuardarNombre(Action):
 
     def name(self) -> Text:
@@ -105,12 +117,17 @@ class ActionGuardarNombre(Action):
             valor_adaptabilidad = 0
             habilidades = []
             lenguajes = []
+            print("nombre_participante: " + nombre_partipante)
             if(existeParticipante(nombre_partipante)):
-                message = "Hola, vamos a realizar una prueba de aptitud para ver lo que votarias ante ciertas tareas. Ademas, te voy a realizar algunas consultas para determinar los conocimientos que tenes actualmente"
+                #message = "Hola, vamos a realizar una prueba de aptitud para ver lo que votarias ante ciertas tareas. Ademas, te voy a realizar algunas consultas para determinar los conocimientos que tenes actualmente"
+                #dispatcher.utter_message(text=message)
+                #message = "En las proximas preguntas debes votar con valores del 0 al 5"
+                #dispatcher.utter_message(text=message)
+                #message = "Que tan comodo te sentis ante una situacion desconocida?"
+                #dispatcher.utter_message(text=message)
+                message = leerPregunta("introduccion", 0)
                 dispatcher.utter_message(text=message)
-                message = "En las proximas preguntas debes votar con valores del 0 al 5"
-                dispatcher.utter_message(text=message)
-                message = "Que tan comodo te sentis ante una situacion desconocida?"
+                message = leerPregunta("introduccion", 1)
                 dispatcher.utter_message(text=message)
             else:
                 message = "El nombre no corresponde a un AgileBot perteneciente al mundo"
@@ -130,35 +147,45 @@ class ActionGuardarValorRespuesta(Action):
         message = "Error"
         if (valor_respuesta != None):
             valor_respuesta = int(valor_respuesta)
-            pregunta_actual = pregunta_actual + 1
-            if (pregunta_actual <= 3):
+            #if (pregunta_actual <= 3):
+             #   valor_riesgo = valor_riesgo + valor_respuesta
+             #   if (pregunta_actual == 1):
+             #       message = "¿Que tan seguro te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
+             #   elif (pregunta_actual == 2):
+             #       message = "¿Que tan ajustado estas de tiempo al finalizar tus sprints?"
+             #   elif (pregunta_actual == 3):
+             #       message = "Del 0 al 5, ¿Cuanto soles pensar que las cosas saldran bien?"
+            #elif (pregunta_actual <= 6):
+            #    valor_optimismo = valor_optimismo + valor_respuesta
+            #    if (pregunta_actual == 4):
+            #        message = "¿Que tanto ves el lado bueno de las cosas?"
+            #    elif (pregunta_actual == 5):
+            #        message = "Del 0 al 5, ¿Usualmente te encuentras de buen humor?"
+            #    elif (pregunta_actual == 6):
+            #        message = "¿Que tanto confias en las decisiones de los demas por sobre las tuyas?"
+            #elif (pregunta_actual <= 9):
+            #    valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
+            #    if (pregunta_actual == 7):
+            #        message = "¿Que tanto seguis la corriente?"
+            #    elif (pregunta_actual == 8):
+            #        message = "Del 0 al 5, ¿Soles confiar en las decisiones de tus pares?"
+            #    elif (pregunta_actual == 9):
+            #        message = "En las siguiente preguntas responde con Si o No"
+            #        dispatcher.utter_message(text=message)
+            #        message = "¿Tenes conocimientos de devops?"
+            print("pregunta actual: " + str(pregunta_actual))
+            if (pregunta_actual < CantidadPreguntas("riesgo")):
                 valor_riesgo = valor_riesgo + valor_respuesta
-                if (pregunta_actual == 1):
-                    message = "¿Que tan seguro te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
-                elif (pregunta_actual == 2):
-                    message = "¿Que tan ajustado estas de tiempo al finalizar tus sprints?"
-                elif (pregunta_actual == 3):
-                    message = "Del 0 al 5, ¿Cuanto soles pensar que las cosas saldran bien?"
-            elif (pregunta_actual <= 6):
-                valor_optimismo = valor_optimismo + valor_respuesta
-                if (pregunta_actual == 4):
-                    message = "¿Que tanto ves el lado bueno de las cosas?"
-                elif (pregunta_actual == 5):
-                    message = "Del 0 al 5, ¿Usualmente te encuentras de buen humor?"
-                elif (pregunta_actual == 6):
-                    message = "¿Que tanto confias en las decisiones de los demas por sobre las tuyas?"
-            elif (pregunta_actual <= 9):
-                valor_adaptabilidad = valor_adaptabilidad + valor_respuesta
-                if (pregunta_actual == 7):
-                    message = "¿Que tanto seguis la corriente?"
-                elif (pregunta_actual == 8):
-                    message = "Del 0 al 5, ¿Soles confiar en las decisiones de tus pares?"
-                elif (pregunta_actual == 9):
-                    message = "En las siguiente preguntas responde con Si o No"
-                    dispatcher.utter_message(text=message)
-                    message = "¿Tenes conocimientos de devops?"
+                message = leerPregunta("riesgo", pregunta_actual)
+            elif (pregunta_actual < CantidadPreguntas("riesgo") + CantidadPreguntas("optimismo")):
+                valor_riesgo = valor_riesgo + valor_respuesta
+                message = leerPregunta("optimismo", pregunta_actual - CantidadPreguntas("riesgo"))
+            elif (pregunta_actual < CantidadPreguntas("riesgo") + CantidadPreguntas("optimismo") + CantidadPreguntas("adaptabilidad")):
+                valor_riesgo = valor_riesgo + valor_respuesta
+                message = leerPregunta("adaptabilidad", pregunta_actual - CantidadPreguntas("riesgo") - CantidadPreguntas("optimismo"))
         else:
-            message = "No se reconocio el valor de la respuesta"   
+            message = "No se reconocio el valor de la respuesta"  
+        pregunta_actual = pregunta_actual + 1 
         dispatcher.utter_message(text=message)
         return []
 
