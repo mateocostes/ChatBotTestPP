@@ -1,7 +1,33 @@
 {
-    "introduccion": ["Hola Vota del 0 al 5"],
-    "preguntas":{"riesgo": ["priesgo1", "priesgo2"], "optimismo": ["poptimismo1"],"adaptabilidad": ["padaptabilidad1"]},
-    "habilidades": ["hab1", "hab2"],
-    "lenguajes":["len1"]
-}
+    "introduccion":[
+       "Hola, vamos a realizar una prueba de aptitud para ver lo que votarias ante ciertas tareas. Ademas, te voy a realizar algunas consultas para determinar los conocimientos que tenes actualmente"
+    ],
+    "preguntas":{
+       "riesgo":[
+          "Del 0 al 5, Que tan comodo te sentis ante una situacion desconocida?",
+          "Que tan seguro te sentis de vos mismo al abordar una tarea de la que no conoces demasiado?"
+       ],
+       "optimismo":[
+          "Del 0 al 5, Cuanto soles pensar que las cosas saldran bien?",
+          "Que tanto ves el lado bueno de las cosas?"
+       ],
+       "adaptabilidad":[
+          "Que tanto confias en las decisiones de los demas por sobre las tuyas?",
+          "Que tanto seguis la corriente?"
+       ]
+    },
+    "habilidades":[
+       "devops",
+       "bases de datos",
+       "inteligencia artificial",
+       "front-end"
+    ],
+    "lenguajes":[
+       "Python",
+       "Java",
+       "C#",
+       "C",
+       "JavaScript"
+    ]
+ }
 

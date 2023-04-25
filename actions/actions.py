@@ -49,7 +49,7 @@ valores_categorias = []
 habilidades = []
 lenguajes = []
 direcPreguntas = "actions/preguntas.json"
-diccionarioPreguntas = readArchivo(direcPreguntas)
+#diccionarioPreguntas = readArchivo(direcPreguntas) #Ya no se lee aca, se siempre que se usa el diccionario por si se actualiza en tiempo de ejecucion
 categoriasPreguntas = []
 categoria_actual = 0
 valor_pregunta = 0
@@ -85,20 +85,25 @@ def altaValores(nombre_partipante) -> bool:
     #print("response: " + response)
 
 def cantidadPreguntas(categoria) -> int:
+    diccionarioPreguntas = readArchivo(direcPreguntas)
     return (len(diccionarioPreguntas["preguntas"][categoria]))
 
 def cantidadRegistros(categoria) -> int:
+    diccionarioPreguntas = readArchivo(direcPreguntas)
     return (len(diccionarioPreguntas[categoria]))
 
 def leerIntroduccion(dispatcher):
+    diccionarioPreguntas = readArchivo(direcPreguntas)
     for pregunta in diccionarioPreguntas["introduccion"]:
         message = str(pregunta)
         dispatcher.utter_message(text=message)
 
 def obtenerPregunta(categoria, posicion) -> Text:
+    diccionarioPreguntas = readArchivo(direcPreguntas)
     return str(diccionarioPreguntas["preguntas"][categoria][posicion])
         
 def obtenerRegistro(categoria, posicion) -> Text:
+    diccionarioPreguntas = readArchivo(direcPreguntas)
     return(str(diccionarioPreguntas[categoria][posicion]))
 
 def accionConocimiento(guarda, nombre_participante) -> Text:
@@ -161,6 +166,7 @@ class ActionGuardarNombre(Action):
         return "guardar_nombre"
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        diccionarioPreguntas = readArchivo(direcPreguntas)
         nombre_partipante = next (tracker.get_latest_entity_values("participante"),None)
         message = ""
         if (nombre_partipante != None):
