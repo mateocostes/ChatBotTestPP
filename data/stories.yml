@@ -4,6 +4,7 @@ stories:
 
 - story: camino_principal
   steps:
+  - checkpoint: check_inicio
   - intent: presentarse
   - action: guardar_nombre
   - checkpoint: check_siguiente

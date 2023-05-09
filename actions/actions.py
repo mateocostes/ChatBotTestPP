@@ -40,8 +40,8 @@ def writeArchivo(dire,diccionario):
             json.dump(diccionario,archivo)
             archivo.close()
 
-api_endpoint_set_vector = "http://201.235.167.187:8088/dispatcher/set-vector" # 192.168.0.209:8088
-api_endpoint_get_vector = "http://201.235.167.187:8088/dispatcher/get-vector" # 192.168.0.209:8088
+api_endpoint_set_vector = "http://IP/dispatcher/set-vector"
+api_endpoint_get_vector = "http://IP/dispatcher/get-vector"
 diccionarioParticipantes = ""
 #Variables utilizadas para guardar los valores
 pregunta_actual = 0
@@ -176,6 +176,7 @@ class ActionGuardarNombre(Action):
             habilidades = []
             lenguajes = []
             categoriasPreguntas = list(dict(diccionarioPreguntas["preguntas"]).keys())
+            categoria_actual = 0
             print("categorias preguntas: " + str(categoriasPreguntas))
             if(existeParticipante(nombre_partipante)):
                 leerIntroduccion(dispatcher)
@@ -194,7 +195,7 @@ class ActionGuardarValorRespuesta(Action):
         return "guardar_valor_respuesta"
 
     def run(self, dispatcher: CollectingDispatcher,tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        global habilidades, lenguajes, pregunta_actual, categoria_actual, valor_pregunta #Declaro las variables globales a utilizar
+        global habilidades, lenguajes, pregunta_actual, categoria_actual, valor_pregunta, habilidades_lenguajes #Declaro las variables globales a utilizar
         valor_respuesta = next (tracker.get_latest_entity_values("valor_respuesta"),None)
         message = "Error"        
         if (valor_respuesta != None):
@@ -207,6 +208,7 @@ class ActionGuardarValorRespuesta(Action):
                 valores_categorias.append(round(valor_pregunta/cantidadPreguntas(categoriasPreguntas[categoria_actual])))
                 pregunta_actual = 0 #para seguir con las preguntas de la proxima categoria
                 categoria_actual = categoria_actual + 1
+                habilidades_lenguajes = 0
                 if categoria_actual < len(categoriasPreguntas):
                     valor_pregunta = 0
                     message = obtenerPregunta(categoriasPreguntas[categoria_actual], pregunta_actual)
