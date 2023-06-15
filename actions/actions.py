@@ -176,7 +176,6 @@ class ActionGuardarNombre(Action):
             habilidades = []
             lenguajes = []
             categoriasPreguntas = list(dict(diccionarioPreguntas["preguntas"]).keys())
-            categoria_actual = 0
             print("categorias preguntas: " + str(categoriasPreguntas))
             if(existeParticipante(nombre_partipante)):
                 leerIntroduccion(dispatcher)
@@ -208,7 +207,6 @@ class ActionGuardarValorRespuesta(Action):
                 valores_categorias.append(round(valor_pregunta/cantidadPreguntas(categoriasPreguntas[categoria_actual])))
                 pregunta_actual = 0 #para seguir con las preguntas de la proxima categoria
                 categoria_actual = categoria_actual + 1
-                habilidades_lenguajes = 0
                 if categoria_actual < len(categoriasPreguntas):
                     valor_pregunta = 0
                     message = obtenerPregunta(categoriasPreguntas[categoria_actual], pregunta_actual)
