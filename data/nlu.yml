@@ -60,6 +60,7 @@ nlu:
     - [usuarionuevo](participante)
     - [nombre](participante)
     - [pepe](participante)
+    - [alelagar](participante)
 
 - intent: respuesta_pregunta
   examples: |
